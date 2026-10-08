@@ -1,6 +1,18 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices, Project } from '@playwright/test';
+import dotenv from 'dotenv';
+import { AUTH_FILE } from './tests/config/auth';
 
+dotenv.config();
 const isCI = !!process.env.CI;
+const browsers: Project[] = isCI
+    ? [
+        { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+        { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    ]
+    : [
+        { name: 'chrome', use: { ...devices['Desktop Chrome'], channel: 'chrome' } },
+    ];
+const [setupBrowser] = browsers;
 
 export default defineConfig({
     testDir: './tests',
@@ -11,34 +23,24 @@ export default defineConfig({
     reporter: [['html']],
 
     use: {
-        baseURL: 'https://litecart.stqa.ru/',
+        baseURL: process.env.BASE_URL,
+        ignoreHTTPSErrors: true,
+        actionTimeout: 10_000,
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
         video: isCI ? 'retain-on-failure' : 'off',
     },
 
-    projects: isCI
-        ? [
-            {
-                name: 'chromium',
-                use: {
-                    ...devices['Desktop Chrome'],
-                },
-            },
-            {
-                name: 'firefox',
-                use: {
-                    ...devices['Desktop Firefox'],
-                },
-            },
-        ]
-        : [
-            {
-                name: 'chrome',
-                use: {
-                    ...devices['Desktop Chrome'],
-                    channel: 'chrome',
-                },
-            },
-        ],
+    projects: [
+        {
+            name: 'setup',
+            testMatch: /.*\.setup\.ts/,
+            use: setupBrowser.use,
+        },
+        ...browsers.map((browser): Project => ({
+            ...browser,
+            use: { ...browser.use, storageState: AUTH_FILE },
+            dependencies: ['setup'],
+        })),
+    ],
 });
