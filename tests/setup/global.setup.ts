@@ -4,13 +4,12 @@ import { AUTH_FILE } from '../config/auth';
 
 export default async function globalSetup() {
     const isCI = !!process.env.CI;
-
     const browser = await chromium.launch({
-        channel: isCI ? undefined : 'chrome',
+        channel: isCI ? undefined : 'chrome'
     });
     const context = await browser.newContext({
         baseURL: process.env.BASE_URL,
-        ignoreHTTPSErrors: true,
+        ignoreHTTPSErrors: true
     });
     const page = await context.newPage();
 

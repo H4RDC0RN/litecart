@@ -20,8 +20,8 @@ export class CheckoutPage {
         this.header = new Header(page);
         this.siteMenu = new SiteMenu(page);
         this.productsTable = this.page.locator('#order_confirmation-wrapper table');
+        this.paymentDue = this.productsTable.locator('tr.footer td').filter({ hasText: NUMBER_REGEX });
         this.confirmButton = this.page.locator('button[name="confirm_order"]');
-        this.paymentDue = this.page.locator('tr.footer td').filter({ hasText: NUMBER_REGEX });
     }
 
     async getOrderItem(productName: string): Promise<OrderItem> {
