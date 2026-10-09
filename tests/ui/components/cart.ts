@@ -25,4 +25,8 @@ export class Cart {
         const expectedAmount = Number.isInteger(amount) ? amount.toString() : amount.toFixed(2);
         await expectPrice(this.totalPrice, expectedAmount);
     }
+
+    async isCartEmpty(): Promise<boolean> {
+        return await this.itemCount.textContent() === '0';
+    }
 }
