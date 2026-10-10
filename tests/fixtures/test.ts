@@ -20,7 +20,5 @@ export const test = base.extend<Fixtures>({
             await homePage.goto();
         }
         await use(homePage);
-    },
+    }
 });
-
-export { expect } from '@playwright/test';

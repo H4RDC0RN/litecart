@@ -21,12 +21,20 @@ export class Cart {
         return new CheckoutPage(this.page);
     }
 
-    async expectTotalPrice(amount: number) {
-        const expectedAmount = Number.isInteger(amount) ? amount.toString() : amount.toFixed(2);
-        await expectPrice(this.totalPrice, expectedAmount);
+    async getItemCount(): Promise<number> {
+        return Number((await this.itemCount.textContent())?.trim());
     }
 
     async isCartEmpty(): Promise<boolean> {
-        return await this.itemCount.textContent() === '0';
+        return await this.getItemCount() === 0;
+    }
+
+    async expectItemCount(count: number) {
+        await expect(this.itemCount).toHaveText(count.toString());
+    }
+
+    async expectTotalPrice(amount: number) {
+        const expectedAmount = Number.isInteger(amount) ? amount.toString() : amount.toFixed(2);
+        await expectPrice(this.totalPrice, expectedAmount);
     }
 }

@@ -1,26 +1,22 @@
-import { test, expect } from '../fixtures/test';
+import { test } from '../fixtures/test';
+import { expect } from '@playwright/test';
 import { products } from '../data/products';
 
 test.describe('Checkout', () => {
-  for (const product of products) {
+  for (const product of Object.values(products)) {
     test(`should successfully place an order for ${product.name}`, async ({ emptyCartHomePage }) => {
       const categoryPage = await emptyCartHomePage.siteMenu.openCategory(product.categoryPath);
       const productPage = await categoryPage.openProduct(product.name);
       await expect(productPage.productName).toHaveText(product.name);
 
-      const productPrice = await productPage.getProductPrice();
-      const expectedTotalPrice = productPrice * product.quantity;
-      await productPage.addToCart(product.quantity, product.size);
+      const expectedOrderItem = await productPage.addToCart(product);
       await expect(productPage.header.cart.itemCount).toHaveText(product.quantity.toString());
-      await productPage.header.cart.expectTotalPrice(expectedTotalPrice);
+      await productPage.header.cart.expectTotalPrice(expectedOrderItem.total);
 
       const checkoutPage = await productPage.header.cart.openCheckout();
-      const orderItem = await checkoutPage.getOrderItem(product.name);
-      expect(orderItem.productName).toBe(product.name);
-      expect(orderItem.quantity).toBe(product.quantity);
-      expect(orderItem.unitCost).toBe(productPrice);
-      expect(orderItem.total).toBe(expectedTotalPrice);
-      await checkoutPage.expectPaymentDue(expectedTotalPrice);
+      const actualOrderItem = await checkoutPage.getOrderItem(product.name);
+      expect(actualOrderItem).toEqual(expectedOrderItem);
+      await checkoutPage.expectPaymentDue(expectedOrderItem.total);
 
       const successOrderPage = await checkoutPage.confirmOrder();
       await successOrderPage.expectOpened();

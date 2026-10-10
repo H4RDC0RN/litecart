@@ -2,7 +2,8 @@ import { Page, Locator } from '@playwright/test';
 import { Header } from '../components/header';
 import { SiteMenu } from '../components/site-menu';
 import { extractNumber } from '../../utils/string-utils';
-import { ProductSize } from '../../data/products';
+import { OrderItem } from '../../models/order-item';
+import { Product } from '../../models/product';
 
 export class ProductPage {
     readonly header: Header;
@@ -26,15 +27,18 @@ export class ProductPage {
         this.addToCartButton = this.productView.locator('button[name="add_cart_product"]');
     }
 
-    async getProductPrice(): Promise<number> {
+    async getPrice(): Promise<number> {
         return extractNumber(await this.productPrice.textContent());
     }
 
-    async addToCart(quantity: number, size?: ProductSize) {
-        await this.quantityInput.fill(quantity.toString());
-        if (size) {
-            await this.sizeSelector.selectOption(size);
+    async addToCart(product: Product): Promise<OrderItem> {
+        const itemsBefore = await this.header.cart.getItemCount();
+        await this.quantityInput.fill(product.quantity.toString());
+        if (product.size) {
+            await this.sizeSelector.selectOption(product.size);
         }
         await this.addToCartButton.click();
+        await this.header.cart.expectItemCount(itemsBefore + product.quantity);
+        return new OrderItem(product.name, product.quantity, await this.getPrice());
     }
 }
