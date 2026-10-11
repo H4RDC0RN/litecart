@@ -1,4 +1,4 @@
-import { Product } from '../models/product';
+import { Product } from '../../src/models/product';
 
 function defineProducts<TProductType extends string>(data: Record<TProductType, Product>): Record<TProductType, Product> {
     return data;

@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { test } from '../../fixtures/test';
 
 export class NavigationPanel {
     private readonly navigationPanel: Locator;
@@ -21,6 +22,10 @@ export class NavigationPanel {
         await this.emailInput.fill(email);
         await this.passwordInput.fill(password);
         await this.loginButton.click();
+    }
+
+    async loginMasked(email: string, password: string) {
+        await test.step('Log in', async () => { this.login(email, password); }, { box: true });
     }
 
     async expectLoggedIn() {

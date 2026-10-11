@@ -1,10 +1,10 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { Header } from '../components/header';
 import { SiteMenu } from '../components/site-menu';
-import { extractNumber, NUMBER_REGEX } from '../../utils/string-utils';
-import { OrderItem } from '../../models/order-item';
+import { extractNumber, NUMBER_REGEX } from '../../../src/utils/string-utils';
+import { OrderItem } from '../../../src/models/order-item';
 import { SuccessOrderPage } from './success-order.page';
-import { expectPrice } from '../../utils/expect-utils';
+import { ExpectOptions, expectPrice } from '../../../src/utils/expect-utils';
 import { Table } from '../components/table';
 
 const ORDER_COLUMN_CLASSES = {
@@ -77,8 +77,8 @@ export class CheckoutPage {
         return item;
     }
 
-    async expectPaymentDue(amount: number) {
-        await expectPrice(this.paymentDue, amount.toFixed(2));
+    async expectPaymentDue(amount: number, options?: ExpectOptions) {
+        await expectPrice(this.paymentDue, amount.toFixed(2), options);
     }
 
     async confirmOrder(): Promise<SuccessOrderPage> {

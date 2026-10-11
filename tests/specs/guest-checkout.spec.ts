@@ -1,8 +1,8 @@
-import { test } from '../fixtures/test';
 import { expect } from '@playwright/test';
-import { products } from '../data/products';
-import { addProductsToCart } from '../flow/cart.flow';
-import { sortByProductName, sumTotals } from '../models/order-item';
+import { addProductsToCart } from '../../src/flows/cart.flow';
+import { sortByProductName, sumTotals } from '../../src/models/order-item';
+import { test } from '../../src/fixtures/test';
+import { products } from '../../src/data/products';
 
 test.describe('Guest checkout', () => {
     test.use({ storageState: { cookies: [], origins: [] } });
@@ -13,7 +13,7 @@ test.describe('Guest checkout', () => {
         const checkoutPage = await homePage.header.cart.openCheckout();
 
         const actualOrderItems = await checkoutPage.getOrderItems();
-        expect(sortByProductName(actualOrderItems)).toEqual(sortByProductName(expectedOrderItems));
-        await checkoutPage.expectPaymentDue(sumTotals(expectedOrderItems));
+        expect.soft(sortByProductName(actualOrderItems)).toEqual(sortByProductName(expectedOrderItems));
+        await checkoutPage.expectPaymentDue(sumTotals(expectedOrderItems), { soft: true });
     });
 });

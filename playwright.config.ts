@@ -1,6 +1,6 @@
 import { defineConfig, devices, Project } from '@playwright/test';
 import dotenv from 'dotenv';
-import { AUTH_FILE } from './tests/config/auth';
+import { AUTH_FILE } from './src/config/constants';
 
 dotenv.config();
 const isCI = !!process.env.CI;
@@ -15,7 +15,6 @@ const browsers: Project[] = isCI
 
 export default defineConfig({
     testDir: './tests',
-    globalSetup: './tests/setup/global.setup.ts',
     fullyParallel: true,
     forbidOnly: isCI,
     retries: isCI ? 2 : 0,
@@ -31,8 +30,16 @@ export default defineConfig({
         video: isCI ? 'retain-on-failure' : 'off',
     },
 
-    projects: browsers.map((browser): Project => ({
-        ...browser,
-        use: { ...browser.use, storageState: AUTH_FILE },
-    })),
+    projects: [
+        {
+            name: 'setup',
+            testMatch: /.*\.setup\.ts/,
+            use: { ...browsers[0].use, trace: 'off', video: 'off', screenshot: 'off' },
+        },
+        ...browsers.map((browser): Project => ({
+            ...browser,
+            use: { ...browser.use, storageState: AUTH_FILE },
+            dependencies: ['setup'],
+        })),
+    ]
 });

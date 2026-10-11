@@ -1,9 +1,9 @@
 import { Page, Locator } from '@playwright/test';
 import { Header } from '../components/header';
 import { SiteMenu } from '../components/site-menu';
-import { extractNumber } from '../../utils/string-utils';
-import { OrderItem } from '../../models/order-item';
-import { Product } from '../../models/product';
+import { extractNumber } from '../../../src/utils/string-utils';
+import { OrderItem } from '../../../src/models/order-item';
+import { Product } from '../../../src/models/product';
 
 export class ProductPage {
     readonly header: Header;

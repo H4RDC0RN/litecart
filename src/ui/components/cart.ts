@@ -1,6 +1,6 @@
-import { Page, Locator, expect } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
+import { ExpectOptions, expectPrice } from "../../utils/expect-utils";
 import { CheckoutPage } from "../pages/checkout.page";
-import { expectPrice } from "../../utils/expect-utils";
 
 export class Cart {
     private readonly cart: Locator;
@@ -33,8 +33,8 @@ export class Cart {
         await expect(this.itemCount).toHaveText(count.toString());
     }
 
-    async expectTotalPrice(amount: number) {
+    async expectTotalPrice(amount: number, options?: ExpectOptions) {
         const expectedAmount = Number.isInteger(amount) ? amount.toString() : amount.toFixed(2);
-        await expectPrice(this.totalPrice, expectedAmount);
+        await expectPrice(this.totalPrice, expectedAmount, options);
     }
 }
