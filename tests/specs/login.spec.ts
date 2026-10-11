@@ -1,4 +1,4 @@
-import { test } from "../../src/fixtures/test";
+import { test } from "@/fixtures/test";
 
 test.describe('Login', () => {
     test.use({ storageState: { cookies: [], origins: [] } });

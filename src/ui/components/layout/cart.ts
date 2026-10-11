@@ -1,19 +1,18 @@
 import { Locator, Page, expect } from "@playwright/test";
-import { ExpectOptions, expectPrice } from "../../utils/expect-utils";
-import { CheckoutPage } from "../pages/checkout.page";
+import { ExpectOptions, expectPrice } from "@/utils/expect-utils";
+import { CheckoutPage } from "@/ui/pages/checkout.page";
 
 export class Cart {
-    private readonly cart: Locator;
+    private readonly root: Locator;
+    private readonly itemCount: Locator;
+    private readonly totalPrice: Locator;
     private readonly checkoutLink: Locator;
 
-    readonly itemCount: Locator;
-    readonly totalPrice: Locator;
-
     constructor(private readonly page: Page) {
-        this.cart = page.locator('#cart');
-        this.itemCount = this.cart.locator('.quantity');
-        this.totalPrice = this.cart.locator('.formatted_value');
-        this.checkoutLink = this.cart.locator('a.link');
+        this.root = page.locator('#cart');
+        this.itemCount = this.root.locator('.quantity');
+        this.totalPrice = this.root.locator('.formatted_value');
+        this.checkoutLink = this.root.locator('a.link');
     }
 
     async openCheckout(): Promise<CheckoutPage> {

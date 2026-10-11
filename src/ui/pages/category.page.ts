@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { ProductPage } from './product.page';
+import { ProductPage } from '@/ui/pages/product.page';
 
 export class CategoryPage {
     private readonly categoryView: Locator;

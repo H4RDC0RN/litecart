@@ -1,11 +1,11 @@
 import { Page, Locator } from '@playwright/test';
-import { CategoryPage } from '../pages/category.page';
+import { CategoryPage } from '@/ui/pages/category.page';
 
 export class SiteMenu {
-    private readonly siteMenu: Locator;
+    private readonly root: Locator;
 
     constructor(private page: Page) {
-        this.siteMenu = page.locator('#site-menu');
+        this.root = page.locator('#site-menu');
     }
 
     async openCategory(categoryPath: string[]): Promise<CategoryPage> {
@@ -20,6 +20,6 @@ export class SiteMenu {
     }
 
     private getCategory(categoryName: string): Locator {
-        return this.siteMenu.getByRole('link', { name: categoryName, exact: true });
+        return this.root.getByRole('link', { name: categoryName, exact: true });
     }
 }

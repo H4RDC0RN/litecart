@@ -1,15 +1,16 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { Header } from '../components/header';
-import { SiteMenu } from '../components/site-menu';
-import { extractNumber, NUMBER_REGEX } from '../../../src/utils/string-utils';
-import { OrderItem } from '../../../src/models/order-item';
-import { SuccessOrderPage } from './success-order.page';
-import { ExpectOptions, expectPrice } from '../../../src/utils/expect-utils';
-import { Table } from '../components/table';
+import { extractNumber, NUMBER_REGEX } from '@/utils/string-utils';
+import { OrderItem } from '@/models/order-item';
+import { SuccessOrderPage } from '@/ui/pages/success-order.page';
+import { ExpectOptions, expectPrice } from '@/utils/expect-utils';
+import { Table } from '@/ui/components/common/table';
+import { CustomerDetailsForm } from '@/ui/components/checkout/customer-details-form';
+import { Header } from '@/ui/components/layout/header';
+import { SiteMenu } from '@/ui/components/layout/site-menu';
 
 const ORDER_COLUMN_CLASSES = {
     productName: 'item',
-    quantity: 'quantity',    
+    quantity: 'quantity',
     unitCost: 'unit-cost',
     sku: 'sku',
     tax: 'tax',
@@ -19,29 +20,31 @@ const ORDER_COLUMN_CLASSES = {
 export class CheckoutPage {
     readonly header: Header;
     readonly siteMenu: SiteMenu;
-    readonly paymentDue: Locator;
+    readonly customerDetails: CustomerDetailsForm;
 
     private readonly checkoutCartView: Locator;
     private readonly shortcuts: Locator;
     private readonly removeButton: Locator;
-    private readonly emptyCartMessage: Locator;
     private readonly tableContainer: Locator;
     private readonly orderTable: Table<keyof typeof ORDER_COLUMN_CLASSES>;
+    private readonly paymentDue: Locator;
     private readonly confirmButton: Locator;
+    private readonly emptyCartMessage: Locator;
 
     constructor(private page: Page) {
         this.header = new Header(page);
         this.siteMenu = new SiteMenu(page);
+        this.customerDetails = new CustomerDetailsForm(page);
 
-        this.checkoutCartView = this.page.locator('#checkout-cart-wrapper');
+        this.checkoutCartView = page.locator('#checkout-cart-wrapper');
         this.shortcuts = this.checkoutCartView.locator('li.shortcut');
         this.removeButton = this.checkoutCartView.locator('button[name="remove_cart_item"]');
-        this.emptyCartMessage = this.checkoutCartView.getByText('There are no items in your cart.');
 
-        this.tableContainer = this.page.locator('#order_confirmation-wrapper table');
+        this.tableContainer = page.locator('#order_confirmation-wrapper table');
         this.orderTable = new Table(this.tableContainer, ORDER_COLUMN_CLASSES, { rowSelector: 'tr:has(td.item)' });
         this.paymentDue = this.tableContainer.locator('tr.footer td').filter({ hasText: NUMBER_REGEX });
-        this.confirmButton = this.page.locator('button[name="confirm_order"]');
+        this.confirmButton = page.locator('button[name="confirm_order"]');
+        this.emptyCartMessage = this.checkoutCartView.getByText('There are no items in your cart.');
     }
 
     async clearCart() {

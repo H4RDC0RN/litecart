@@ -11,12 +11,12 @@ type TableOptions = {
 
 export class Table<THeader extends string> {
     private readonly columns: Record<THeader, string>;
-    private readonly headerRowLocator: Locator;
+    private readonly headerLocator: Locator;
     private readonly rowLocator: Locator;
 
     constructor(root: Locator, columns: Record<THeader, string>, options: TableOptions = {}) {
         this.columns = columns;
-        this.headerRowLocator = root.locator(options.headerRowSelector ?? `${TR}:has(${TH})`);
+        this.headerLocator = root.locator(options.headerRowSelector ?? `${TR}:has(${TH})`);
         this.rowLocator = root.locator(options.rowSelector ?? `${TR}:has(${TD})`);
     }
 
@@ -41,7 +41,7 @@ export class Table<THeader extends string> {
     }
 
     private getColumnIndex(columnClass: string): Promise<number> {
-        return this.headerRowLocator.locator(`${TH}.${columnClass}`)
+        return this.headerLocator.locator(`${TH}.${columnClass}`)
             .evaluate(headerCell => (headerCell as HTMLTableCellElement).cellIndex);
     }
 

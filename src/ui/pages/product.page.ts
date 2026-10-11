@@ -1,17 +1,17 @@
-import { Page, Locator } from '@playwright/test';
-import { Header } from '../components/header';
-import { SiteMenu } from '../components/site-menu';
-import { extractNumber } from '../../../src/utils/string-utils';
-import { OrderItem } from '../../../src/models/order-item';
-import { Product } from '../../../src/models/product';
+import { Page, Locator, expect } from '@playwright/test';
+import { extractNumber } from '@/utils/string-utils';
+import { OrderItem } from '@/models/order-item';
+import { Product } from '@/models/product';
+import { Header } from '@/ui/components/layout/header';
+import { SiteMenu } from '@/ui/components/layout/site-menu';
 
 export class ProductPage {
     readonly header: Header;
     readonly siteMenu: SiteMenu;
-    readonly productName: Locator;
 
     private readonly productView: Locator;
-    private readonly productPrice: Locator;
+    private readonly productNameLabel: Locator;
+    private readonly productPriceLabel: Locator;
     private readonly quantityInput: Locator;
     private readonly sizeSelector: Locator;
     private readonly addToCartButton: Locator;
@@ -19,16 +19,25 @@ export class ProductPage {
     constructor(private page: Page) {
         this.header = new Header(page);
         this.siteMenu = new SiteMenu(page);
+
         this.productView = page.locator('#box-product');
-        this.productName = this.productView.locator('.title[itemprop="name"]');
-        this.productPrice = this.productView.locator('.price-wrapper [itemprop="price"]');
+        this.productNameLabel = this.productView.locator('.title[itemprop="name"]');
+        this.productPriceLabel = this.productView.locator('.price-wrapper [itemprop="price"]');
         this.quantityInput = this.productView.locator('input[name="quantity"]');
         this.sizeSelector = this.productView.locator('select[name*="size" i]');
         this.addToCartButton = this.productView.locator('button[name="add_cart_product"]');
     }
 
+    getSlug(): string {
+        return new URL(this.page.url()).pathname.split('/').filter(Boolean).pop()!;
+    }
+
+    async expectProductName(productName: string) {
+        await expect(this.productNameLabel).toHaveText(productName);
+    }
+
     async getPrice(): Promise<number> {
-        return extractNumber(await this.productPrice.textContent());
+        return extractNumber(await this.productPriceLabel.textContent());
     }
 
     async addToCart(product: Product): Promise<OrderItem> {

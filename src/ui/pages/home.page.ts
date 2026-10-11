@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
-import { Header } from '../components/header';
-import { SiteMenu } from '../components/site-menu';
-import { NavigationPanel } from '../components/navigation-panel';
+import { Header } from '@/ui/components/layout/header';
+import { NavigationPanel } from '@/ui/components/layout/navigation-panel';
+import { SiteMenu } from '@/ui/components/layout/site-menu';
 
 export class HomePage {
     readonly header: Header;

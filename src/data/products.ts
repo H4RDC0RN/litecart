@@ -1,8 +1,9 @@
-import { Product } from '../../src/models/product';
+import { Product } from '@/models/product';
 
 function defineProducts<TProductType extends string>(data: Record<TProductType, Product>): Record<TProductType, Product> {
     return data;
 }
+
 export const products = defineProducts({
     regular: {
         categoryPath: ['Rubber Ducks'],
