@@ -4,7 +4,7 @@ import { CategoryPage } from '@/ui/pages/category.page';
 export class SiteMenu {
     private readonly root: Locator;
 
-    constructor(private page: Page) {
+    constructor(private readonly page: Page) {
         this.root = page.locator('#site-menu');
     }
 

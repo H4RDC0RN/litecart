@@ -6,8 +6,8 @@ export class LoginBox {
     private readonly passwordInput: Locator;
     private readonly loginButton: Locator;
 
-    constructor(parent: Locator) {
-        this.root = parent.locator('#box-account-login');
+    constructor(root: Locator) {
+        this.root = root;
         this.emailInput = this.root.locator('input[name="email"]');
         this.passwordInput = this.root.locator('input[name="password"]');
         this.loginButton = this.root.locator('button[name="login"]');
@@ -19,7 +19,7 @@ export class LoginBox {
             await this.passwordInput.fill(password);
             await this.loginButton.click();
         }, { box: masked });
-    }
+    }    
 
     async expectHidden() {
         await expect(this.root).toBeHidden();

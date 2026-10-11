@@ -6,7 +6,7 @@ export class Header {
     readonly cart: Cart;
     private readonly homeButton: Locator
 
-    constructor(private page: Page) {
+    constructor(private readonly page: Page) {
         this.cart = new Cart(page);
         this.homeButton = page.locator('#logotype-wrapper').getByRole('link');
     }

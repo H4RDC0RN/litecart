@@ -14,7 +14,7 @@ export class HomePage {
         this.navigation = new NavigationPanel(page);
     }
 
-    async goto() { 
+    async goto() {
         await this.page.goto('/');
-     }
+    }
 }

@@ -10,7 +10,7 @@ export class NavigationPanel {
 
     constructor(parent: Page) {
         const root = parent.locator('#navigation');
-        this.login = new LoginBox(root);
+        this.login = new LoginBox(root.locator('#box-account-login'));
         this.recentViewed = new RecentlyViewedBox(root);
         this.account = new AccountBox(root);
     }

@@ -1,9 +1,11 @@
 import { test as base } from '@playwright/test';
 import { HomePage } from '@/ui/pages/home.page';
+import { LoginPage } from '@/ui/pages/login.page';
 
 type Fixtures = {
     homePage: HomePage;
     emptyCartHomePage: HomePage;
+    loginPage: LoginPage
 };
 
 export const test = base.extend<Fixtures>({
@@ -20,5 +22,11 @@ export const test = base.extend<Fixtures>({
             await homePage.goto();
         }
         await use(homePage);
-    }
+    },
+
+    loginPage: async ({ page }, use) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+        await use(loginPage);
+    },
 });
