@@ -14,3 +14,10 @@ USER_PASSWORD=
 
 The `.env` file is listed in `.gitignore` and must not be committed.
 In CI the same variables are provided through GitHub repository secrets.
+
+## Allure report
+
+```bash
+npm run allure:generate   # build Allure report
+npm run allure:open       # open in browser
+```
