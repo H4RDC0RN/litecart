@@ -8,6 +8,7 @@ test.describe('Checkout', () => {
       const categoryPage = await emptyCartHomePage.siteMenu.openCategory(product.categoryPath);
       const productPage = await categoryPage.openProduct(product.name);
       await productPage.expectProductName(product.name);
+      await productPage.expectDiscount(product.hasDiscount);
 
       const expectedOrderItem = await productPage.addToCart(product);
       await productPage.header.cart.expectTotalPrice(expectedOrderItem.total, { soft: true });

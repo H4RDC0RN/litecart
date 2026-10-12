@@ -1,6 +1,7 @@
 export type Product = {
     categoryPath: string[];
     name: string;
+    hasDiscount: boolean;
     quantity: number;
     size?: ProductSize;
 };

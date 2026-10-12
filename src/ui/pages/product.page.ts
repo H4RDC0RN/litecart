@@ -12,6 +12,7 @@ export class ProductPage {
     private readonly productView: Locator;
     private readonly productNameLabel: Locator;
     private readonly productPriceLabel: Locator;
+    private readonly campaignPriceLabel: Locator;
     private readonly quantityInput: Locator;
     private readonly sizeSelector: Locator;
     private readonly addToCartButton: Locator;
@@ -23,6 +24,7 @@ export class ProductPage {
         this.productView = page.locator('#box-product');
         this.productNameLabel = this.productView.locator('.title[itemprop="name"]');
         this.productPriceLabel = this.productView.locator('.price-wrapper [itemprop="price"]');
+        this.campaignPriceLabel = this.productView.locator('.campaign-price');
         this.quantityInput = this.productView.locator('input[name="quantity"]');
         this.sizeSelector = this.productView.locator('select[name*="size" i]');
         this.addToCartButton = this.productView.locator('button[name="add_cart_product"]');
@@ -34,6 +36,13 @@ export class ProductPage {
 
     async expectProductName(productName: string) {
         await expect(this.productNameLabel).toHaveText(productName);
+    }
+
+    async expectDiscount(expected: boolean) {
+        const message = `Product should ${expected ? '' : 'not '}have a discount, check test data`;
+        await (expected
+            ? expect(this.campaignPriceLabel, message).toBeVisible()
+            : expect(this.campaignPriceLabel, message).toBeHidden());
     }
 
     async getPrice(): Promise<number> {
