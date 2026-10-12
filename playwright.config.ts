@@ -19,7 +19,7 @@ export default defineConfig({
     forbidOnly: isCI,
     retries: isCI ? 2 : 0,
     workers: 1,
-    reporter: [['html']],
+    reporter: [['html'], ['allure-playwright']],
 
     use: {
         baseURL: process.env.BASE_URL,

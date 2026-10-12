@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { extractNumber, NUMBER_REGEX } from '@/utils/string-utils';
+import { extractNumber } from '@/utils/string-utils';
 import { OrderItem } from '@/models/order-item';
 import { SuccessOrderPage } from '@/ui/pages/success-order.page';
 import { ExpectOptions, expectPrice } from '@/utils/expect-utils';
@@ -16,6 +16,8 @@ const ORDER_COLUMN_CLASSES = {
     tax: 'tax',
     total: 'sum',
 } as const;
+
+const NO_ITEMS_TEXT = 'There are no items in your cart.';
 
 export class CheckoutPage {
     readonly header: Header;
@@ -42,9 +44,9 @@ export class CheckoutPage {
 
         this.tableContainer = page.locator('#order_confirmation-wrapper table');
         this.orderTable = new Table(this.tableContainer, ORDER_COLUMN_CLASSES, { rowSelector: 'tr:has(td.item)' });
-        this.paymentDue = this.tableContainer.locator('tr.footer td').filter({ hasText: NUMBER_REGEX });
+        this.paymentDue = this.tableContainer.locator('xpath=.//tr[@class="footer"]/td[last()]');
         this.confirmButton = page.locator('button[name="confirm_order"]');
-        this.emptyCartMessage = this.checkoutCartView.getByText('There are no items in your cart.');
+        this.emptyCartMessage = this.checkoutCartView.getByText(NO_ITEMS_TEXT);
     }
 
     async clearCart() {

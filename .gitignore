@@ -6,3 +6,5 @@ node_modules/
 /blob-report/
 .env
 .auth/
+allure-results/
+allure-report/

@@ -1,4 +1,4 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Page, expect } from "@playwright/test";
 import { Header } from "@/ui/components/layout/header";
 import { LoginBox } from "@/ui/components/layout/login-box";
 import { SiteMenu } from "@/ui/components/layout/site-menu";

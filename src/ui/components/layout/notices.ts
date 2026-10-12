@@ -7,7 +7,7 @@ export class Notices {
     private readonly root: Locator;
     private readonly error: Locator;
 
-    constructor(private readonly page: Page) {
+    constructor(page: Page) {
         this.root = page.locator('#notices');
         this.error = this.root.locator('.notice.errors');
     }

@@ -12,7 +12,7 @@ export class OrderItem {
     }
 };
 
-export const byProductName = (a: OrderItem, b: OrderItem) => a.productName.localeCompare(b.productName);
+export const byProductName = (firstItem: OrderItem, secondItem: OrderItem) => firstItem.productName.localeCompare(secondItem.productName);
 
 export const sortByProductName = (items: OrderItem[]): OrderItem[] => [...items].sort(byProductName);
 
