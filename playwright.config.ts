@@ -1,6 +1,6 @@
 import { defineConfig, devices, Project } from '@playwright/test';
 import dotenv from 'dotenv';
-import { AUTH_FILE } from './src/config/constants';
+import { AUTH_FILE } from '@/config/constants';
 
 dotenv.config();
 const isCI = !!process.env.CI;

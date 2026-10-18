@@ -1,6 +1,6 @@
 import { Product } from '@/models/product';
 
-function defineProducts<TProductType extends string>(data: Record<TProductType, Product>): Record<TProductType, Product> {
+function defineProducts<TKey extends string>(data: Record<TKey, Product>): Record<TKey, Product> {
     return data;
 }
 

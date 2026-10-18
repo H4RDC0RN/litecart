@@ -50,7 +50,7 @@ export class CheckoutPage {
     }
 
     async clearCart() {
-        const productCount = await this.orderTable.getRows().then(rows => rows.length);
+        const productCount = await this.orderTable.getRowCount();
         const itemsBeforeLastCount = productCount - 1;
 
         if (productCount > 0) {

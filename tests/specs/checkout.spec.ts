@@ -4,7 +4,8 @@ import { products } from '@/data/products';
 
 test.describe('Checkout', () => {
   for (const product of Object.values(products)) {
-    test(`should successfully place an order for ${product.name}`, async ({ emptyCartHomePage }) => {
+    const kind = product.hasDiscount ? 'discounted' : 'regular';
+    test(`should successfully place an order for a ${kind} product (${product.name})`, async ({ emptyCartHomePage }) => {
       const categoryPage = await emptyCartHomePage.siteMenu.openCategory(product.categoryPath);
       const productPage = await categoryPage.openProduct(product.name);
       await productPage.expectProductName(product.name);
