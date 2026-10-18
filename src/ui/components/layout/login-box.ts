@@ -1,3 +1,4 @@
+import { fillSecret } from "@/utils/input-utils";
 import test, { Locator, expect } from "@playwright/test";
 
 export class LoginBox {
@@ -14,12 +15,14 @@ export class LoginBox {
     }
 
     async submit(email: string, password: string, masked = true) {
+        const fill = (input: Locator, value: string) => masked ? fillSecret(input, value) : input.fill(value);
+
         await test.step('Log in', async () => {
-            await this.emailInput.fill(email);
-            await this.passwordInput.fill(password);
+            await fill(this.emailInput, email);
+            await fill(this.passwordInput, password);
             await this.loginButton.click();
-        }, { box: masked });
-    }    
+        });
+    }
 
     async expectHidden() {
         await expect(this.root).toBeHidden();
